@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -10,6 +11,7 @@ public class Client {
     private Socket connection;
     private DataInputStream socketIn;
     private DataOutputStream socketOut;
+    private FileInputStream fileIn;
     private int bytes;
     private byte[] buffer = new byte[BUFFER_SIZE];
 
@@ -21,7 +23,13 @@ public class Client {
             socketOut = new DataOutputStream(connection.getOutputStream()); // Write data to server
 
             if (write == true) {
+                // fileIn = new FileInputStream(filename);
 
+                // while (true) {
+                //     bytes = fileIn.read(buffer, 0, BUFFER_SIZE); // Read from file
+                //     if (bytes <= 0) break; // Check for end of file
+                //     socketOut.write(buffer); // Write bytes to socket
+                // }
             }
 
             else {
