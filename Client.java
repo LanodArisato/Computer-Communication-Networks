@@ -23,19 +23,15 @@ public class Client {
             socketOut = new DataOutputStream(connection.getOutputStream()); // Write data to server
 
             if (write == true) {
-                // fileIn = new FileInputStream(filename);
-
-                // while (true) {
-                //     bytes = fileIn.read(buffer, 0, BUFFER_SIZE); // Read from file
-                //     if (bytes <= 0) break; // Check for end of file
-                //     socketOut.write(buffer); // Write bytes to socket
-                // }
+                socketOut.writeInt(1); //send intent to write
+                writeTo(filename);
             }
-
             else {
+                socketOut.writeInt(0); //send intent to read
                 socketOut.writeUTF(filename); // Write filename to server
+                int readStatus = socketIn.readInt();
 
-                if (socketIn.readInt() == -1) { //if server sends code for file not found
+                if (readStatus == -1) { //if server sends code for file not found
                     connection.close();
                     throw new Exception("File does not exist on server.");
                 }
@@ -43,7 +39,7 @@ public class Client {
                 OutputStream fileOut = new FileOutputStream(filename);
 
                 // Read file contents from server
-                while (true) {
+                while (readStatus >= 0) {
                     bytes = socketIn.read(buffer, 0, BUFFER_SIZE); // Read from socket
                     if (bytes <= 0) break; // Check for end of file
                     //System.out.print(new String(buffer, StandardCharsets.UTF_8)); // Write to standard output
@@ -54,6 +50,36 @@ public class Client {
             }
         } catch (Exception ex) {
             System.out.println("[Client Error] " + ex.getMessage());
+        }
+
+    }
+  
+    private void writeTo(String filename) {
+        try 
+        {
+            fileIn = new FileInputStream(filename);
+            socketOut.writeUTF(filename);
+            int existStatus = socketIn.readInt();
+
+            if(existStatus == 0) //if server sends all clear code
+            {
+                System.out.println("Writing " + filename + " to server.");
+
+                    while (true) {
+                        bytes = fileIn.read(buffer, 0, BUFFER_SIZE); // Read from file
+                        if (bytes <= 0) break; // Check for end of file
+                        socketOut.write(buffer); // Write bytes to socket
+                    }
+                connection.close();
+            }
+            else if (existStatus == -2) //if server sends alrdy exists code
+            {
+                System.out.println("File already exists on server.");
+                connection.close();
+            }
+        }
+        catch (Exception ex) {
+
         }
     }
 

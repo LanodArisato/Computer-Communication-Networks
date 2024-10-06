@@ -9,14 +9,14 @@ public class bin {
         try {
             
               // Writing to binary file
-            OutputStream Stream = new FileOutputStream("data.bin");
-            Stream.write(new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F}); 
+            OutputStream Stream = new FileOutputStream("dataClient.bin");
+            Stream.write(new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x6C, 0x6C, 0x6C, 0x6C, 0x6C, 0x6C, 0x6C, 0x6C, 0x6C,}); 
             
               // ASCII values for "Hello"
             Stream.close();
             
               // Reading from a binary file
-            InputStream inputStream = new FileInputStream("data.bin");
+            InputStream inputStream = new FileInputStream("dataClient.bin");
             
               int data;
           
